@@ -1,0 +1,6 @@
+[core]
+    remote = nexus-repo
+['remote "nexus-repo"']
+    url = https://nexus.htsc.vn/repository/htsc-raw-release-hosted/Team-AI/dvc/example
+    auth = basic
+    method = PUT
