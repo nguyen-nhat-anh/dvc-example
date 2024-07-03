@@ -51,3 +51,19 @@ aws_secret_access_key = ...
 ### Minio
 1. Config credential: chẳng hạn export `AWS_ACCESS_KEY_ID` và `AWS_SECRET_ACCESS_KEY`
 2. `dvc get -o <output_path> --rev <commit/tag/branch> <data_registry_repo> <path_in_repo>`
+
+## Notes
+* `dvc add`: track file với dvc (generate ra file `.dvc` tương ứng để track bằng git) (`dvc add --no-commit`) + lưu file vào cache (`dvc commit`)
+* `dvc fetch`: download data từ remote về cache
+* `dvc checkout`: update workspace dựa vào file `.dvc` tương ứng (data lấy từ cache ra)
+* `dvc pull` = `dvc fetch` + `dvc checkout`
+* `dvc status`: so sánh workspace vs cache
+    * `--remote <remote-name>`: so sánh cache vs remote
+* `dvc push`: upload data từ cache (kiểm tra các file `.dvc` ở workspace, xác định các file nào trong cache chưa upload) lên remote storage 
+    * `-a` (`--all-branches`): không chỉ kiểm tra `.dvc` ở workspace mà còn ở tất cả các git branch nữa
+    * `-T` (`--all-tags`): không chỉ kiểm tra `.dvc` ở workspace mà còn ở tất cả các git tag nữa
+    * `-A` (`--all-commits`): không chỉ kiểm tra `.dvc` ở workspace mà còn ở tất cả các git commit nữa
+* `dvc install`: install git hooks để tự động hoá một số thao tác với `dvc`:
+    * `post-checkout`: thực hiện `dvc checkout` sau `git checkout` để tự động update workspace
+    * `pre-commit`: thực hiện `dvc status` trước `git commit` để tự động thông báo thay đổi trong workspace so với cache
+    * `pre-push`: thực hiện `dvc push` trước `git push` để tự động upload các file được track với dvc lên remote storage
